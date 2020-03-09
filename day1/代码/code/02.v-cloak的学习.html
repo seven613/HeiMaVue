@@ -4,11 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div id='app'>
-        <p v-cloak>{{msg}}</p>
+        <!--使用v-cloak能够解决差值表达式闪烁的问题-->
+        <p v-cloak>========{{msg}}+++++</p>
+        <h4 v-text="msg">========</h4>
+        <div>{{msg2}}</div>//不能解析成html元素
+        <div v-text="msg2"></div>//不能解析成html元素
+        <div v-html="msg2"></div>//可以解析成html元素
+        <!--默认v-text是没有闪烁问题的-->
+        <!--v-text会覆盖元素中原本的内容，但是插值表达式 只会替换自己的这个占位符，不会把整个元素的内容清空-->
     </div>
     <script src="./lib/vue.js"></script>
     <script>
@@ -16,8 +27,10 @@
             el:'#app',
             data:{
                 msg:'123',
+                msg2:'<h1>哈哈，我是一个大大的H1,我大，我骄傲</h1>'
             }
         })
- P   </script>
+
+    </script>
 </body>
 </html>
