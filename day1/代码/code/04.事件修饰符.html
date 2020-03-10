@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        .inner{
+            height: 150px;
+            background-color: pink;
+        }
+        .outer{
+            padding: 40px;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id ="app"> 
+        <!--使用 .stop 阻止冒泡-->
+        <!--
+        <div class="inner" @click="divHandler">
+            增加了.stop修饰符，确保了不进行后面点击事件，否则就会触发divHandler-
+            <input type="button" value="戳他" @click.stop="btnHandler">
+        </div>
+        -->
+
+        <!--使用 .prevent 阻止默认行为-->
+        <!-- <a href="www.baidu.com" @click.prevent='linkClick'>有问题，先去百度</a> -->
+
+        <!--使用 .capture 实现捕获触发事件的机制-->
+        <!-- <div class="inner" @click.capture="divHandler">
+            <input type="button" value="戳他" @click="btnHandler">
+        </div> -->
+
+        <!-- 使用 .self 实现只有点击当前元素时才会触发函数 -->
+         <!-- <div class="inner" @click.self="divHandler">
+            <input type="button" value="戳他" @click="btnHandler">
+        </div> -->
+
+        <!-- 使用 .once 只触发一次  -->
+        <!-- <a href="www.baidu.com" @click.once='linkClick'>有问题，先去百度</a> -->
+
+        <!-- 演示 .stop 和 .self  的区别-->
+        <!-- .self 只会阻止自己身上冒泡行为的触发，并不会阻止冒泡行为 -->
+        <div class="outer" @click="div2Handler">
+            <div class="inner" @click.self="divHandler">
+                <input type="button" @click="btnHandler" value="点我">
+            </div>
+        </div>
+    </div>
+
+    <script>
+     //创建Vue实例,得到 ViewModel
+     var vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {
+            divHandler(){
+                console.log("这是触发了inner div的点击事件");
+            },
+            btnHandler(){
+                console.log("这是触发了btn 的点击事件");
+            },
+            linkClick(){
+                consol.log("sdfsdf");
+            },
+            div2Handler(){
+                console.log("div2 ")
+            }
+        }
+     });
+    </script>
+</body>
+
+</html>

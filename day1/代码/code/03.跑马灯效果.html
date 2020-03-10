@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <input type="button" value="浪起来" @click="lang" />
+      <input type="button" value="别浪" @click ='nolang' />
+      <input type="button" value="停止浪起来" @click='stoplang'>
+      <input type="button" value="停止别浪" @click='stopnolang'>
+
+      <h4>{{msg}}</h4>
+      <h4>{{msg2}}</h4>
+    </div>
+
+    <script>
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          msg: "速度浪起来~~~~",
+          msg2:"鬼畜，别浪！猥琐发育~~~",
+          langintervalId:null,//在data中定义的定时器Id
+          nolangintervalId:null,
+        },
+        methods: {
+          lang() {
+            console.log(this.msg);
+            if (this.langintervalId != null) return;
+            //this是有作用域的
+            //遵循ES6 使用箭头函数=>代替this的域
+            this.langintervalId=setInterval(() => { //定时器
+            //获取字符串的第一个字
+            var start = this.msg.substring(0,1)
+            //获取字符串最后一个字
+            var end = this.msg.substring(1)
+            this.msg = end + start
+            }, 400);//400毫秒执行一次
+            //注意：VM实例会监听自己身上的data中所有数据的改变，只要数据一发生编号，就会自动把最新的数据，从data上同步到页面中区；【好处：程序员只需关心数据，不需要考虑如何重新渲染DOM页面】
+          },
+          nolang(){
+            //不使用箭头函数=>的写法就是提前把this作为一个变量存起来。
+            var _this = this
+            if(this.nolangintervalId != null) return;
+
+            this.nolangintervalId=setInterval(function () {
+                       //获取字符串的第一个字
+            var start = _this.msg2.substring(0,1)
+            //获取字符串最后一个字
+            var end = _this.msg2.substring(1)
+            _this.msg2 = end + start
+            } ,400);
+          },
+          stoplang(){
+            clearInterval(this.langintervalId)
+            //每当清除了定时器之后，需要重新把intervalId设置为空
+            this.langintervalId = null;
+          },
+          stopnolang(){
+            clearInterval(this.nolangintervalId)
+            this.nolangintervalId =null;
+          }
+        }
+      });
+
+      //分析：
+      //1.给【浪起来】 按钮绑定一个事件,用v-on    @
+     //2.在按钮的事件处理函数中，写相关的业务逻辑代码：拿到msg字符串，然后调用字符串的substring来进行字符串的截取操作，把第一个字符截取出来，放到最后一个位置即可
+     //3.为了实现点击下按钮，自动截取功能，需要把第2步代码放到一个定时器中
+    </script>
+  </body>
+</html>

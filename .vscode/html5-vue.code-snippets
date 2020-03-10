@@ -1,0 +1,30 @@
+{
+	"h5 template": {
+        "prefix": "vh", // 对应的是使用这个模板的快捷键
+        "body": [
+         "<!DOCTYPE html>",
+         "<html lang=\"en\">",
+         "<head>",
+         "\t<meta charset=\"UTF-8\">",
+         "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+         "\t<meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">",
+         "\t<title>Document</title>",
+         "\t<script src=\"./lib/vue.js\"></script>",     
+         "</head>\n",
+         "<body>",
+         "\t<div id =\"app\"> </div>\n",
+         "\t<script>",
+         "\t //创建Vue实例,得到 ViewModel",
+         "\t var vm = new Vue({",
+         "\t\tel: '#app',",
+         "\t\tdata: {},",
+         "\t\tmethods: {}",
+         "\t });",
+         "\t</script>",
+         "</body>\n",
+         "</html>"
+        ],
+        "description": "HT-H5" // 模板的描述
+     }
+ 
+}
