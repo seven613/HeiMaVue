@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="./lib/vue.js"></script>
     <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.css">
 </head>
+
 <body>
     <div id='app'>
         <div class="panel panel-primary">
@@ -24,13 +26,13 @@
                     Name:
                     <input type="text" class="form-control" v-model="name">
                 </label>
-                    <!-- 在vue中，使用事件绑定机制，为元素指定处理函数的时候，如果加了小括号，就可以给函数传参数了 -->
+                <!-- 在vue中，使用事件绑定机制，为元素指定处理函数的时候，如果加了小括号，就可以给函数传参数了 -->
                 <input type="button" value="添加" class="btn btn-primary" @click="add">
 
                 <label> 搜索名称关键字:
-                    <input type="text" v-model="keywords" @click="search">
+                    <input type="text" v-model="keywords">
                 </label>
-                
+
             </div>
         </div>
 
@@ -45,50 +47,64 @@
                     <th>ctime</th>
                     <th>operation</th>
                 </tr>
-                <tbody>
-                    <tr v-for="item in list" :key="item.id">
-                        <td>{{ item.id }}</td>
-                        <td v-text="item.name"></td>
-                        <td>{{ item.ctime }}</td>
-                        <td>
-                            <a href="" @click.prevent="del(item.id)">删除</a>
-                        </td>
-                    </tr>
-                </tbody>
+            <tbody>
+                <!-- 之前，v-for 中的数据，都是直接从data的list中直接渲染过来的-->
+                <!-- 现在，我们定义了一个search方法，同时，把所有关键字通过参数传递给search方法 -->
+                <!-- 在search方法中，通过执行for循环，把所有符合条件的数据保存到一个新数组，返回 -->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{ item.id }}</td>
+                    <td v-text="item.name"></td>
+                    <td>{{ item.ctime }}</td>
+                    <td>
+                        <a href="" @click.prevent="del(item.id)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
             </thead>
         </table>
     </div>
     <script>
         var vm = new Vue({
-            el:'#app',
-            data:{
-                id:'',
-                name:'',
-                keywords:'',
-                list:[
-                    {id:1,name:"宝马",ctime:new Date()},
-                    {id:2,name:"奔驰",ctime:new Date()}
+            el: '#app',
+            data: {
+                id: '',
+                name: '',
+                keywords: '', //搜索关键字
+                list: [{
+                        id: 1,
+                        name: "宝马",
+                        ctime: new Date()
+                    },
+                    {
+                        id: 2,
+                        name: "奔驰",
+                        ctime: new Date()
+                    }
                 ]
             },
-            methods:{
-                add(){
+            methods: {
+                add() {
                     //1.获取id 和name,已经双向绑定，可以直接从data中获得
                     //2.组织一个对象
                     //3.把这个对象，调用数组的 push方法，添加到当前data的list上。
                     //4.注意：在Vue中，已经实现了数据的双向绑定，每当我们修改了data中的数据，Vue会默认监听到数据的改动，自动把新数据应用到页面上
                     //5.
-                    if (!this.id){
+                    if (!this.id) {
                         return;
                     }
-                    this.list.push({id:this.id,name:this.name,ctime:new Date()})
+                    this.list.push({
+                        id: this.id,
+                        name: this.name,
+                        ctime: new Date()
+                    })
                     this.id = this.name = ''
-                    
+
                 },
-            
-                del(id){
+
+                del(id) {
                     //1.如何根据id找到要删除对象的索引
                     //2.找到索引后，调用数组的splice方法
-                    
+
                     // this.list.some((item,i)=>{
                     //     if(item.id == id){
                     //         this.list.splice(i,1)
@@ -96,22 +112,35 @@
                     //         return true;
                     //     }
                     // })
-                    
+
                     //findIndex查找对象索引
-                    var index = this.list.findIndex(item=>{
-                        if(item.id == id){
+                    var index = this.list.findIndex(item => {
+                        if (item.id == id) {
                             return true;
                         }
                     })
                     console.log(index)
-                    this.list.splice(index,1)
+                    this.list.splice(index, 1)
+                },
+
+                search(keywords) { //根据关键字进行搜索
+                    
+                    //第一种方法，循环遍历数组，匹配是否包含关键字，如果包含把数据放到新数组中
+                    /*this.list.forEach(item => {
+                        if (item.name.indexOf(keywords) != -1) {
+                            newList.push(item)
+                        }
+                    })*/
+                    //第二种方法，使用数组过滤
+                    return this.list.filter(item=>{
+                        if(item.name.includes(keywords) ){
+                            return item
+                        }
+                    })
                 }
             },
-                search(keywords){
-
-                }
-      
         });
     </script>
 </body>
+
 </html>
