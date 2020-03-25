@@ -24,13 +24,14 @@
                 </label>
                 <label>
                     Name:
-                    <input type="text" class="form-control" v-model="name">
+                    <input type="text" class="form-control" v-model="name" @keyup.f2="add">
                 </label>
                 <!-- 在vue中，使用事件绑定机制，为元素指定处理函数的时候，如果加了小括号，就可以给函数传参数了 -->
                 <input type="button" value="添加" class="btn btn-primary" @click="add">
 
                 <label> 搜索名称关键字:
-                    <input type="text" v-model="keywords">
+                    <!-- 注意：Vue中所有的指令，调用的时候，都以v-开头 -->
+                    <input type="text" v-model="keywords" id="search" v-focus v-color>
                 </label>
 
             </div>
@@ -91,6 +92,34 @@
             }
         
         })
+        //使用Vue.directive()定义全局的指令
+        //其中，参数1：指令的名称 注意：定义的时候指令名称前不需要加v-前缀
+        //但是调用的时候必须要增加v-前缀
+        //参数2：是一个对象,这个对象身上有一些指令相关的函数，这些函数可以在特定的阶段,执行相关的操作
+        Vue.directive('focus',{
+            bind:function(el){
+                //每当指令绑定到元素上的时候，会立即执行这个bind函数,只执行一次
+                //注意：在每个函数中，第一个参数永远是el,表示被绑定了指令的那个元素，是一个原生的js对象
+                //el.focus()//还在内存中，DOM树还未生成,此时调用focus()不起作用
+            },
+            inserted:function(el){
+                //表示元素插入到DOM中的时候，会执行inserted函数,只触发一次
+                el.focus()
+            },
+            updated:function(){
+                //表示VNode更新的时候，会执行updated,可能会触发多次
+            }
+        })
+
+
+        //自定义字体颜色的自定义指令
+        Vue.directive('color',{
+            bind:function(el){
+                el.style.color='red'
+            }
+        })
+        //自定义全局按键修饰符
+        Vue.config.keyCodes.f2 = 113
 
         var vm = new Vue({
             el: '#app',
@@ -187,23 +216,26 @@
 
                 // yyyy-mm-dd
                 var y = dt.getFullYear()
-                var m = dt.getMonth() + 1
-                 var d = dt.getDate()
+                var m = (dt.getMonth() + 1).toString().padStart(2,'0')
+                 var d = (dt.getDate()).toString().padStart(2,'0')
 
             //return y +'-'+ m + '-' + d  //可读性太差
             
                 if(pattern.toLowerCase()  === 'yyyy-mm-dd'){
                     return `${y}-${m}-${d}` //模版字符串 可读性好，
                  } else {
-                var hh = dt.getHours()
-                var mm = dt.getMinutes()
-                var ss = dt.getSeconds()
+                var hh = (dt.getHours()).toString().padStart(2,'0')
+                var mm = (dt.getMinutes()).toString().padStart(2,'0')
+                var ss = (dt.getSeconds()).toString().padStart(2,'0')
                 return `${y}-${m}-${d} ${hh}:${mm}:${ss}~~~~` //模版字符串 可读性好，
             }
                 }
             }
 
         })
+
+        //原生的获取焦点
+        //document.getElementById('search').focus()
     </script>
     
 
