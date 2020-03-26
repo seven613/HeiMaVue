@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-resource.js"></script>
+    <!-- vue-resource依赖于vue，必须先导入vue -->
+    <!-- this.$http.get -->
+</head>
+<body>
+    <div id='app'>
+        <input type="button" value="get请求" @click="getInfo">
+        <input type="button" value="post请求" @click="postInfo">
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            methods:{
+                getInfo(){
+                    //发起get请求
+                    this.$http.get('http://127.0.0.1:8000/user/').then(function(result){
+                        console.log(result.body)
+                    })
+                },
+                postInfo(){
+                    this.$http.post('http://127.0.0.1:8000/user/',{},{emulateJSON:true}).then(result =>{
+                        console.log(result.body)
+                    })
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>
