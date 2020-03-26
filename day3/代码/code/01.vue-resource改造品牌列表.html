@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-resource.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap-3.3.7/css/bootstrap.css">
+    
+</head>
+<body>
+    <div id='app'>
+        
+
+        
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">添加品牌</h3>
+              </div>
+              <div class="panel-body form-inline">
+                    
+                    <label > 品牌：
+                        <input type="text"  v-model="name" class="form-control">
+                    </label>
+                    <label >
+                        <input type="button" value="添加" @click="add()" class="btn btn-primary">
+                    </label>
+
+              </div>
+        </div>
+        
+
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for ="item in list" :key = "item.id">
+                    <td>{{ item.id }} </td>
+                    <td>{{ item.name }} </td>
+                    <td>{{ item.ctime }}</td>
+                    <td>
+                        <a href="">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                name:'',
+                list:[
+                    {id:1,name:'五菱宏光',ctime:new Date()},
+                    {id:2,name:'众泰',ctime:new Date()}
+                ]
+            },
+            created() {
+                //当Vm实例的data和methods初始化完毕后，vm会自动执行created生命周期函数bundleRenderer.renderToStream
+                this.getalllist()
+            },
+            methods:{
+                add(){
+                    //添加品牌列表到后台服务器
+                    //分析
+                    //1.API接口要求post请求，this.$http.post
+                    //2.this.$http.post 中接收三个参数
+                    //  2.1 第一个参数：请求的url地址
+                    //  2.2.第二个参数：要提交给服务器的数据，要以对象形式提交给服务器{name:this.name}
+                    //  2.3 第三个参数 是一个配置对象，要以那种表单数据类型提交过去,{
+                    //   emulateJSON:true}, 以普通表单格式，将数据提交给服务器 application/x-www-form-urlencoded
+                    //3.在 post方法中，使用.then来设置成功的回调函数，如果想要拿到成功的结果，需要result.body
+                    this.$http.post('http://vue.studyit.io/api/addproduct',{name:this.name},{emulateJSON:true})
+                    .then(result =>{
+                        if(result.status === '0'){
+                            //成功了
+                            //添加完成后，需要手动刷新页面，执行getalllist
+                            this.name =''
+                            this.getalllist()
+                            
+                        } else {
+                            //失败了
+                            alert('添加失败')
+                        }
+                    })
+                },
+                getalllist(){
+                    //获取所有车的品牌列表
+                    //分析:
+                    //1.导入v-rescource包，可以直接使用this.$http发起数据请求
+                    //2.根据接口Api文档，获取列表时应该发起一个get请求
+                    //3.this.$http.get('url').then(function(result){})
+                    //4.当通过then指定回调函数之后，在回调函数中，可以拿到数据服务器返回的result
+                    //5.先判断result.status是否等于0，如果等于0,就成功了，可以把result.message赋值给this.list;
+                    //如果不等于0，可以弹框提醒获取数据失败！
+                    this.$http.get('http://vue.studyit.io/api/getprodlist').then(function(result){
+                       var result = result.body
+                        if (result.status === '0'){
+                            //成功了
+                            this.list = result.message
+                        } else {
+                            alert("获取数据失败!")
+                        }
+                    })
+                }
+            }
+            
+        })
+    </script>
+</body>
+</html>
