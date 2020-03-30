@@ -46,7 +46,7 @@
                     <td>{{ item.name }} </td>
                     <td>{{ item.ctime }}</td>
                     <td>
-                        <a href="">删除</a>
+                        <a href="" @click.prevent="del(item.id)">删除</a>
                     </td>
                 </tr>
             </tbody>
@@ -55,6 +55,9 @@
 
     </div>
     <script>
+        //配置全局数据接口根域名，每次单独发起http请求时，url路径使用相对路径，不加 /
+        Vue.http.options.root ='http://www.liulongbin.top:3005/'//设置全局根路径
+        Vue.http.emulateJSON = true //全局启用JSON选项
         var vm = new Vue({
             el:'#app',
             data:{
@@ -79,9 +82,11 @@
                     //  2.3 第三个参数 是一个配置对象，要以那种表单数据类型提交过去,{
                     //   emulateJSON:true}, 以普通表单格式，将数据提交给服务器 application/x-www-form-urlencoded
                     //3.在 post方法中，使用.then来设置成功的回调函数，如果想要拿到成功的结果，需要result.body
-                    this.$http.post('http://www.liulongbin.top:3005/api/getprodlist/',{name:this.name},{emulateJSON:true})
+                    // this.$http.post('http://www.liulongbin.top:3005/api/addproduct/',{name:this.name},{emulateJSON:true})//不使用根路径
+                    // this.$http.post('api/addproduct/',{name:this.name},{emulateJSON:true})//使用根路径
+                    this.$http.post('api/addproduct/',{name:this.name})//使用JSON选项
                     .then(result =>{
-                        if(result.status === 0){
+                        if(result.body.status === 0){
                             //成功了
                             //添加完成后，需要手动刷新页面，执行getalllist
                             this.name =''
@@ -102,13 +107,25 @@
                     //4.当通过then指定回调函数之后，在回调函数中，可以拿到数据服务器返回的result
                     //5.先判断result.status是否等于0，如果等于0,就成功了，可以把result.message赋值给this.list;
                     //如果不等于0，可以弹框提醒获取数据失败！
-                    this.$http.get('http://www.liulongbin.top:3005/api/getprodlist/').then(function(result){
+                    // this.$http.get('http://www.liulongbin.top:3005/api/getprodlist/').then(function(result){
+                    this.$http.get('api/getprodlist/').then(function(result){
                        var result = result.body
                         if (result.status === 0){
                             //成功了
                             this.list = result.message
                         } else {
                             alert("获取数据失败!")
+                        }
+                    })
+                },
+                del(id){//删除品牌
+                    // this.$http.get('http://www.liulongbin.top:3005/api/delproduct/'+ id)
+                    this.$http.get('api/delproduct/'+ id)
+                    .then(result =>{
+                        if(result.body.status === 0){
+                            this.getalllist()
+                        } else {
+                            alert('删除失败')
                         }
                     })
                 }
