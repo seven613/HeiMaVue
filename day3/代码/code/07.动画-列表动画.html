@@ -12,6 +12,30 @@
             line-height: 35px;
             padding-left: 5px;
             font-size: 24px;
+            width: 100%;
+        }
+
+        li:hover{
+            background-color:hotpink;
+            transition: all 0.6s ease;
+        }
+
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateY(80px);
+        }
+
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 0.6s ease;
+        }
+        /* .v-move .v-leave-to 配合使用，实现列表元素渐渐飘上来的效果 */
+        .v-move{
+            transition: all 0.6s ease;
+        }
+        .v-leave-active{
+            position: absolute;
         }
     </style>
 </head>
@@ -29,13 +53,18 @@
         </label>
         
         <input type="button" value="添加" @click=add>
-
+        <!-- 如果要实现列表过渡动画时，列表是通过v-for循环则
+        不能使用transition包裹，必须使用transitionGroup包裹 -->
         <ul>
-            <li v-for="item in list" :key="item.id">
-                {{item.id}} -- {{item.name}}
-            </li>
+            <!-- 给transition-group 添加appear属性，实现页面刚展示时动画效果 -->
+            <!-- tag属性制定页面渲染成ul，否则会被渲染为span元素，不符合w3c规范 -->
+            <transition-group appear tag="ul">
+                <li v-for="(item,i) in list" :key="item.id" @click="del(i)">
+                    {{item.id}} -- {{item.name}}
+                </li>
+            </transition-group>
         </ul>
-
+     
     </div>
     <script>
         var vm = new Vue({
@@ -54,6 +83,9 @@
                 add(){
                     this.list.push({id:this.id,name:this.name})
                     this.id=this.name=''
+                },
+                del(i){
+                    this.list.splice(i,1)
                 }
             }
 
