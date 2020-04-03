@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        #app {
+            text-align: center;
+        }
+        
+        table {
+            margin: 0 auto;
+        }
+        
+        td {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="text" placeholder="搜索" v-model="sousuo">
+        <table border="1">
+            <th>编号</th>
+            <th>英雄</th>
+            <th>技能</th>
+            <tr v-for="(item,index) in sousuo1()" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.jn}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        var app = new Vue({
+            el:'#app',
+            data:{
+                sousuo:'',
+                list:[
+                    {id:1,name:"后羿",jn:"射箭"},
+                    {id:2,name:"妲己",jn:"魅惑"},
+                    {id:3,name:"猴子",jn:"棍子"}
+                ]
+            },
+            computed: {//设置计算属性
+                Search(){
+                    if(this.sousuo){
+                        return this.list.filter((value)=>{//过滤数组元素，this.list就是上面的那个死数据
+                            return value.name.includes(this.sousuo);//查看value.name里面是否包含输入的字体
+                        });//this.sousuo跟上面的输入框是双重绑定
+                    }
+                }
+                
+            },
+            methods: {
+                sousuo1(){
+                    //console.log('sousuo1')
+                    if(!this.sousuo){
+                        return this.list;
+                    }
+                    return this.Search
+                }
+            },
+        })
+    </script>
+</body>
+</html>
