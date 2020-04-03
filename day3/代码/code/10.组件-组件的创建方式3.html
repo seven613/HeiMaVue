@@ -10,6 +10,11 @@
     <div id="app">
         <mycom3></mycom3>
     </div>
+
+    <div id="app2">
+        <mycom3></mycom3>
+        <mycom4></mycom4>
+    </div>
     <!-- template必须要在vue控制的元素外面定义 -->
     <template id="tmpl">
         <div>
@@ -17,6 +22,11 @@
         </div>
     </template>
 
+    <template id="tmpl2">
+        <div>
+            <h3>这是创建的私有组件</h3>
+        </div>
+    </template>
 
     <script>
         Vue.component('mycom3',{
@@ -29,6 +39,45 @@
             methods:{}
         })
 
+        var vm2  = new Vue({
+            el:'#app2',
+            data:{},
+            methods: {
+                
+            },
+            filters:{},
+            directives:{},
+            components:{
+                'mycom4':{
+                    template:'#tmpl2'
+                }
+            },
+
+            beforeCreate() {
+                
+            },
+            created() {
+                
+            },
+            beforeMount() {
+                
+            },
+            mounted() {
+                
+            },
+            beforeUpdate() {
+                
+            },
+            updated() {
+                
+            },
+            beforeDestroy() {
+                
+            },
+            destroyed() {
+                
+            },
+        })
     </script>
 </body>
 </html>
