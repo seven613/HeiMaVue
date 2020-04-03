@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <mycom2></mycom2>
+    </div>
+        <script >
+            //这是第一种创建方式的简写
+            Vue.component('mycom2',{
+               // template:'<h3>这是使用Vue.component创建的组件</h3>'
+               //template只能使用唯一一个根元素，不能出现多个同级根元素 如：<h3></h3><span></span>
+                template:'<div><h3>这是使用Vue.component创建的组件</h3><span>123123</span></div>'
+            })            
+
+            var vm = new Vue({
+                el:'#app',
+                data:{},
+                methods:{}
+            })
+        </script>
+</body>
+</html>
