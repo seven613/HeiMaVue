@@ -11,13 +11,20 @@
         <mycom></mycom>
     </div>
     <script>
-        // 1.1使用Vue.extend创建全局的组件
-        var com1 = Vue.extend({
-            template:'<h3>这是使用Vue.extend创建的组件</h3>'
-        })
-        //1.2使用Vue.component生成组件。语法：Vue.compenent('页面组件id','创建的模版')
-        //如果页面的ID命名使用驼峰形式，那么在页面引用组件必须改为小写，而且中间加-。最好都使用小写
-        Vue.component('mycom', com1)
+        
+        // // 1.1使用Vue.extend创建全局的组件
+        // var com1 = Vue.extend({
+        //     template:'<h3>这是使用Vue.extend创建的组件</h3>'
+        // })
+        // //1.2使用Vue.component生成组件。语法：Vue.compenent('页面组件id','创建的模版')
+        // //如果页面的ID命名使用驼峰形式，那么在页面引用组件必须改为小写，而且中间加-。最好都使用小写
+        // Vue.component('mycom', com1)
+            //合并写法
+            Vue.component('mycom', Vue.extend({
+                template:'<h3>这是使用Vue.extend创建的组件，第二种方式</h3>'
+            }))
+
+
         var vm = new Vue({
             el:"#app",
             data:{},
