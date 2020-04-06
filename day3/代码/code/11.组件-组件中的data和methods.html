@@ -8,20 +8,35 @@
 </head>
 <body>
     <div id="app">
+        <!-- 这个msg是实例中的数据 -->
+        <h1>{{msg}}</h1> 
         <mycom></mycom>
     </div>
     <template id="tmpl">
         <div>
             <h3>这是一个全局组件</h3>
+            <!-- 这个msg是组件中的数据 -->
+            <h1>{{msg}}</h1>
         </div>
     </template>
     <script >
+        // 1.组件可以有自己的data
+        //2.组件的data与实例中的data不一样。实例中的data可以是一个对象，组件的data必须是一个方法
+        //3.组件中的data除了是一个方法外，还必须return 一个对象
+        //4.组件中的data数据使用方式和实例中的data使用方式完全一样
         Vue.component('mycom', {
-            template:'#tmpl'
+            template:'#tmpl',
+            data:function(){
+                return {
+                    msg:'这个是组件中data定义的数据消息'
+                }
+            }
         })
         var vm = new Vue({
             el:'#app',
-            data:{}
+            data:{
+                msg:'这是实例中的数据信息'
+            }
         })
     </script>
 </body>
