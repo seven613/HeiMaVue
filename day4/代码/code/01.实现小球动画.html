@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+      .ball {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background-color: red;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <input type="button" value="添加到购物车" @click="flag=!flag" />
+        <!-- 1.将小球放到transition元素中才能实现动画效果 -->
+        <!-- 2.在元素transition上定义三个钩子函数，创建对应的三个方法 -->
+      <transition
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter">
+        <div class="ball" v-show="flag"></div>
+    
+      </transition>
+     
+    </div>
+    <script>
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          flag: false,
+        },
+        methods: {
+            beforeEnter(el){
+                //动画开始进入之前的钩子函数
+                el.style.transform="translate(0,0)" //小球的开始位置
+            },
+            enter(el,done){
+                //小球移动动画中
+                el.offsetWidth //??
+                el.style.transform="translate(150px,450px)"// 小球的结束位置
+                el.style.transition ="all 1s ease" // 过渡
+                done()//执行afterEnter方法
+            },
+            afterEnter(el){
+                //小球动画结束后，将小球状态标志取反
+                // el.style.opacity = 0 不能实现小球结束。
+                this.flag = !this.flag // 功能1，隐藏小球；功能2 让flag 变为false 结束动画。当第二次点击按钮时，又从false到true 然后false
+                // Vue 把动画使用钩子函数分成了两部分
+                //我们使用flag，来表示动画的切换
+                //动画开始：flag=false ,上半场  flag从 false -> true;下半场 true -> false
+            }
+        },
+      });
+    </script>
+  </body>
+</html>
