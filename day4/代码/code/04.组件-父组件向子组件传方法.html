@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <com2 @func="show"></com2>
+    </div>
+    <template id='tmpl'>
+        <div>
+            <h1>这是子组件</h1>
+            <input type="button" value="这是子组件的按钮，点击它，触发父组件身上的show方法" @click="myclick">
+        </div>
+    </template>
+    <script>
+        // 定义
+        var com2={
+            template:'#tmpl',
+            data(){
+                return {
+                    sonMsg:{name:'小头儿子',age:12}
+                }
+            },
+            methods:{
+                myclick(){
+                    this.$emit('func',this.sonMsg)
+                }
+            }
+        }
+
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                dataFromSon:null
+            },
+            methods:{   
+                show(data){
+                    // console.log('调用了父组件身上的show方法----'+data)
+                    console.log(data)
+                    this.dataFromSon = data
+                }
+            },
+            components:{
+                com2
+            }
+        })
+    </script>
+</body>
+</html>
