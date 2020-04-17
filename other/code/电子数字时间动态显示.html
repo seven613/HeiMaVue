@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--引入本地vuejs，可以导入在线vue.min.js，此处省略-->
+<script type="text/javascript" src="./lib/vue.js"></script>
+<title>vue.js数字时钟本地时间代码</title>
+<!--css设置，没区别，html直接设置-->
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  /*整体背景颜色渐变效果设置*/
+  background: radial-gradient(ellipse at center, pink 0%, blue 70%);
+  background-size: 100%;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+#clock {
+  font-family: 'Share Tech Mono', monospace;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  /*显示文字颜色*/
+  color: lightgreen;
+
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+#clock .time {
+  letter-spacing: 0.05em;
+  font-size: 80px;
+  padding: 5px 0;
+}
+#clock .date {
+  letter-spacing: 0.1em;
+  font-size: 24px;
+}
+#clock .text {
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-style: italic;
+  padding: 20px 0 0;
+}
+</style>
+</head>
+<body>
+
+<!--div容器定义，vue的特点-->
+<div id="clock">
+    <!--三行显示：有顺序性；2对大括号-->
+    <p class="text">数字时钟</p>
+    <p class="date">{{ date }}</p>
+    <p class="time">{{ time }}</p>
+</div>
+<!--vue格式的js文件-->
+<script>
+// vue格式的js文件和js文件格式差不多，采用倒装法，与python不同-->
+var clock = new Vue({
+    // el就是对象：上面div里的id内容，注意#符号
+    el: '#clock',
+    data: {
+        // data里面的内容就是class的内容，但是因为可变所以先是空的
+        // 先各自定义一个空的，后面利用函数获得值
+        time: '',
+        date: ''
+    }
+});
+/* Model层 */
+var week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+var timerID = setInterval(updateTime, 1000);
+// 先定义一个空的时间更新函数
+updateTime();
+// 再定义时间更新函数，获取动态时间值
+function updateTime() {
+    // 定义一个cd变量获取动态时间
+    var cd = new Date();
+    // 注意这里的time和date的获得值，就会赋值给上面的data里面去；2是显示2位；4是显示4位
+    clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
+    clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth()+1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+};
+// 定义零填充函数：就是没有数值就是0来填充
+function zeroPadding(num, digit) {
+    var zero = '';
+    for(var i = 0; i < digit; i++) {
+        zero += '0';
+    }
+    return (zero + num).slice(-digit);
+}
+</script>
+</body>
+</html>
