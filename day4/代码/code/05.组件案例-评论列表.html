@@ -12,7 +12,7 @@
 <body>
     <div id="app">
 
-        <cmt-box></cmt-box>
+        <cmt-box @func='loadComments'></cmt-box>
 
 
         <ul class="list-group">
@@ -56,7 +56,16 @@
             },
             methods:{
                 postComment(){
-                    
+                    var comment = {id:Date.now(),name:this.name,content:this.content}
+
+                    var list =JSON.parse(localStorage.getItem('cmts')||'[]')
+                    // list.push(comment)
+                    list.unshift(comment)
+                    localStorage.setItem('cmts',JSON.stringify(list))
+
+                    this.user = this.comment =''
+
+                    this.$emit('func')
                 }
             }
         }
@@ -81,7 +90,15 @@
                     }
                 ]
             },
-            methods: {},
+            created() {
+                this.loadComments()
+            },
+            methods: {
+                loadComments(){
+                    var list =JSON.parse(localStorage.getItem('cmts')||'[]')
+                    this.list = list
+                }
+            },
             components:{
              'cmt-box':commentBox // 字面量定义包含大写字母，必须使用这种定义格式，不能使用commentBox，程序报错
             }
