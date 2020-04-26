@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/account">Account</router-link>
+        <router-view></router-view>
+    </div>
+    <template id="tmpl">
+        <div>
+            <h1>这是Account组件</h1>
+            <!-- 路由指向 -->
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/register">注册</router-link>
+            <!-- 组件中路由显示占位 -->
+            <router-view></router-view>
+        </div>
+    </template>
+    <script>
+        var account = {
+            template: "#tmpl",
+        };
+
+        var login = {
+            template: "<h1>登录</h1>",
+        };
+
+        var register = {
+            template: "<h1>注册</h1>",
+        };
+
+        const router = new VueRouter({
+            routes: [
+                {
+                    path: "/account",
+                    component: account,
+                    // 子路由定义使用children
+                    // 子路由中path不需要使用斜线，否则又重新从根路径开始
+                    children: [{
+                            path: 'login',
+                            component: login
+                        },
+                        {
+                            path: 'register',
+                            component: register
+                        }
+                    ]
+                }
+                // {
+                //     path: "/account/loign",
+                //     component: login
+                // },
+                // {
+                //     path: "/account/register",
+                //     component: register
+                // },
+            ],
+        });
+        var vm = new Vue({
+            el: "#app",
+            data: {},
+            methods: {},
+            router,
+        });
+    </script>
+</body>
+
+</html>
