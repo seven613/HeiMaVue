@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+    <style>
+        html,body{
+            /* margin 是外边距属性，可以有四个值，分别是x,y,width,height */、
+            /* padding 是内边距属性，也可以有四个值， */
+            margin: 0;
+            padding: 0;
+        }
+        .header{
+            background-color: hotpink;
+            height: 80px;
+        }
+        h1{
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+        .container{
+            /* 左右显示 */
+            display: flex;
+            height: 600px;
+        }
+        .left{
+            background-color: lawngreen;
+            /* 将页面分成10等份，左侧列表区域占2份 */
+            flex: 2;
+        }
+        .main{
+            background-color: lightseagreen;
+             /* 将页面分成10等份，左侧列表区域占8份 */
+            flex: 8;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 路由显示占位 -->
+        <router-view></router-view>
+        <!-- 将两个路由显示占位放到一个容器里 -->
+        <div class="container">
+            <router-view name='left'></router-view>
+            <router-view name='main'></router-view>
+        </div>
+        
+    </div>
+    <script>
+        var header = {
+            template: '<h1 class="header">header头部区域</h1>'
+        }
+        var leftBox = {
+            template: '<h1 class="left">left左侧区域</h1>'
+        }
+        var mainBox = {
+            template: '<h1 class="main">main主要区域</h1>'
+        }
+        var router = new VueRouter({
+            routes: [{
+                path: '/',
+                // 不同于单数形式，单数形式只能指定一个组件，复数形式可以指定多个组件，
+                components: {
+                    'default': header,//'default' 自定义的默认路由名称，目的是为了显示header
+                    'left': leftBox,
+                    'main': mainBox
+                }
+            }]
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+            router
+        })
+    </script>
+</body>
+
+</html>
