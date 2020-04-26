@@ -8,35 +8,72 @@
     <script src="./lib/vue.js"></script>
     <!-- 导入vue-router路由模块 -->
     <script src="./lib/vue-router.js"></script>
+    <style>
+      .router-link-active，
+      .myactive {
+        color: red;
+        font-weight: 80;
+        font-style: italic;
+        font-size: 80px;
+        text-decoration: underline;
+      }
+      /* 过度动画效果样式 */
+      .v-enter,
+      .v-leave-to{
+        opacity: 0;
+        transform: translateX(140px);
+      }
+      /* 过度动画样式的组件 */
+      .v-enter-active,
+      .v-leave-active{
+        transition: all 0.5s ease;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <a href="#/login">登录</a>
-      <a href="#/register">注册</a>
-      <router-view></router-view>
+      <!-- <a href="#/login">登录</a>
+      <a href="#/register">注册</a> -->
+        <!-- 默认渲染为a标签 ,使用tag 可以渲染为span-->
+        <router-link to="/login" tag="span">登录</router-link>
+        <router-link to="/register">注册</router-link>
+        <!-- 实现动画效果，先出后进 -->
+        <transition mode="out-in">
+        <!-- vue-router提供的元素，专门用来当作组件展示的占位符 -->
+          <router-view></router-view>
+        </transition>
+
     </div>
 
     <script>
-      // 2.创建一个路由对象
+      //组件的模版对象
       var login = {
         template: "<h1>登录组件</h1>",
       };
       var register = {
         template: "<h1>注册组件</h1>",
       };
-
+      // 2.创建一个路由对象，当导入vue-route包之后，再window全局对象中，就有了一个路由的构造函数，
+      //  叫做VueRouter
+      // 在new路由独享的时候，可以为构造函数传递一个配置对象
       var routerObj = new VueRouter({
-        routes: [
+        routes: [ // route 表示路由匹配规则的
+        // 每个路由规则，都是一个对象，必须包含两个属性：
+        // path 表示监听这个路由的链接地址
+        // component 表示匹配path路由成功后跳转到的那个组件,属性值必须是组件模板对象，不能是组件的引用名称
+          // { path: '/', component:login},//不推荐，因为url不是login
+          { path: "/", redirect:'/login'},//重定向到login
           { path: "/login", component: login },
           { path: "/register", component: register }
-        ]
+        ],
+        linkActiveClass:'myactive' //定义激活类名
       });
 
       var vm = new Vue({
         el: "#app",
         data: {},
         methods: {},
-        router: routerObj,
+        router: routerObj//将路由规则对象注册到vm实例上，用来监听URL变化，展示不同的
       });
     </script>
   </body>
