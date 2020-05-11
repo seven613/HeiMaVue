@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+
+        <!-- :parentmsg 绑定子组件的一个元素，将父组件的数值传过来 -->
+        <com1 :parentmsg="msg" @func="getmsgfromson"></com1>
+    </div>
+    <template id="tmpl">
+        <div>
+            <h1>这是子组件,需要父组件消息----{{parentmsg}}</h1>
+            <!-- 定义一个按钮，绑定一个点击发送消息的方法 -->
+            <input type="button" value="子组件向父组件传递数组" @click="sendMsg">
+        </div>
+    </template>
+    <script >
+        // 父组件向子组件传值流程
+        //1.父组件data属性定义传递的值msg，2.子组件引用的时候，子组件定一个参数parentMsg，使用v-bind(:)将parentMsg与父组件传递的值msg关联
+        //3.子组件内部使用props属性，定义数组，并将子组件引用时绑定的参数parentMsg作为数组元素4.子组件中要引用props定义的数组元素
+
+        //子组件向父组件传值流程
+        //1.父组件定义获取子组件数据的方法getmsgfromson
+        //2.子组件引用的时候，定义方法func,使用@绑定父组件的方法getmsgfromson
+        //3.子组件定义方法sendMsg，使用$emid('func')执行子组件引用时定义的方法形参数func,
+        
+        var com1 = {
+
+            template:'#tmpl',
+            data(){
+                return{
+                    msg:'子组件消息，将被父组件引用'
+                }
+            },
+            // 子组件获得父组件的数值，使用props：[组件中被绑定的形参]
+            props:['parentmsg'],
+            methods:{
+                sendMsg(){//按钮点击就执行这个方法
+                    this.$emit('func',this.msg)//调用组件绑定的自定义方法func,而func绑定了父组件的getmsgfromson方法，这样就实现了了子组件向父组件传值和方法
+                }
+            }
+        }
+
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'父组件消息',
+                msgfromson:''
+            },
+            methods:{
+                getmsgfromson(data){
+                    //父组件的方法，目的是获得子组件传递过来的数值和方法
+                    this.msgfromson=data
+                    console.log(this.msgfromson)
+                }
+            },
+            components:{
+                com1
+            }
+        })
+    </script>
+</body>
+</html>
